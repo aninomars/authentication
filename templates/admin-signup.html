@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TheArchive</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth_style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <form method="post" action="/register/admin">
+            <input  name="username" type="text" placeholder="Username" required>
+            <input name="email" type="email" placeholder="Email" required>
+            <input name="password" type="password" placeholder="Password" required>
+            <input name="confirm" type="password" placeholder="Confirm Password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+        <div class="links">
+            <a href="{{ url_for('login') }}">Already have an account? Login</a>
+        </div>
+    </div>
+</body>
+</html>
