@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.secret_key = '&%#hbbfdyuis54*^%#GHF*Y( 6t6t(*^t98'
 
 
+@app.route('/index')
+def index():
+
+    return render_template('index.html')
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -71,9 +75,30 @@ def admin_register():
 
         return redirect(url_for('login'))
     return render_template('admin-signup.html')
+    
 @app.route('/login')
 def login():
 
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not username and password:
+        return 'Please fill in all the fields'
+
+    else:
+        conn = sqlite3.connect('authentication.db')
+        cursor = conn.cursor()
+        sql_lite = 'SELECT * FROM user WHERE USERNAME = ?'
+
+        cursor.execute(sql_lite, (username,))
+        user = cursor.fetchone()
+
+        if user:
+            if user['password'] == password:
+                
+                return redirect(url_for('index')
+        else:
+            return 'username does not exist, try again'
 
     return render_template('login.html')
 
