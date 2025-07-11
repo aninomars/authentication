@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import sqlite3
 
+# install the package on local machine
+from bcrypt import hashpw, checkpw, gensalt
+
 from werkzeug.utils import redirect
 
 app = Flask(__name__)
@@ -21,6 +24,9 @@ def register():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    # hash the password
+    hashed_pw = hashpw(password, gensalt())
+    
     if request.method == 'POST':
 
 
@@ -34,7 +40,7 @@ def register():
 
             return redirect(url_for('register'))
         cursor.execute('''INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, ?)''',
-                           (username, email, password, 'user'))
+                           (username, email, hashed_pw, 'user'))
 
         conn.commit()
         cursor.close()
@@ -52,6 +58,8 @@ def admin_register():
     email = request.form.get('email')
     password = request.form.get('password')
 
+    # hashed admin password
+    hashed_pw = hashpw(password, gensalt())
 
     if request.method == 'POST':
 
@@ -67,7 +75,7 @@ def admin_register():
             return "An admin already exists. Permission denied."
 
         else:
-            cursor.execute('''INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, ?)''',(username, email, password, 'admin'))
+            cursor.execute('''INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, ?)''',(username, email, hashed_pw, 'admin'))
 
         conn.commit()
         cursor.close()
